@@ -1,0 +1,17 @@
+#!/bin/bash
+
+appName=$1
+appDomains=$2
+
+NGINX_VHOSTS_PATH=/etc/nginx/vhosts.runtime
+NGINX_VHOST_TEMPLATE=/etc/nginx/conf/tpl/vhost-template.conf
+
+IFS=' ' read -r -a appDomainsArr <<< "$appDomains"
+serverDomain="${appDomainsArr[0]}"
+
+vhostContent=$(sed -e "s/\${domain}/$serverDomain/" -e "s/\${appName}/$appName/" $NGINX_VHOST_TEMPLATE)
+mkdir -p $NGINX_VHOSTS_PATH
+
+printf "$vhostContent" > $NGINX_VHOSTS_PATH/$appName.conf
+
+nginx -s reload

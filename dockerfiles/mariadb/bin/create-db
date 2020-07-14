@@ -1,0 +1,8 @@
+#!/bin/bash
+
+dbName=$1
+if [ -z "$dbName" ]; then
+    printf "DB name is required\n"; exit 1;
+fi
+
+mysql -u root -p$MYSQL_ROOT_PASSWORD -s -e "CREATE DATABASE IF NOT EXISTS \`$dbName\`;"
